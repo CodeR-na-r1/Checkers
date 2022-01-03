@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Figure.h"
+#include "board.h"
 
 class Checher : public Figure
 {

@@ -6,4 +6,6 @@ struct Point
 
 	Point();
 	Point(int _x, int _y);
+
+	bool operator==(const Point& other) const;
 };

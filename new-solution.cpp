@@ -1,8 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 
 #include "Board.h"
-#include "Checher.h"
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
 	ofstream out;
 	out.open("output.txt");
 	out << *board;
+	out.close();
 
 	return 0;
 }

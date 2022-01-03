@@ -1,5 +1,6 @@
+#pragma once
+
 #include "Checher.h"
-#include "board.h"
 
 Checher::Checher() : Figure() {};
 
@@ -15,28 +16,28 @@ bool Checher::isWhite() const
 
 void Checher::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills)
 {
-	if (_point.x - 1 >= 0 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x - 1] != nullptr&& _board[_point.y + 1][_point.x - 1]->isWhite()!=this->white&& _point.x - 2 >= 0 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x - 2] == nullptr)
+	if (_point.x - 1 >= 0 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x - 1] != nullptr && _board[_point.y + 1][_point.x - 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x - 1, _point.y + 1)) == _kills.end() && _point.x - 2 >= 0 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x - 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back( Point(_point.x - 1, _point.y + 1) );
 		_get_more_kills(_board, Point(_point.x - 2, _point.y + 2), copy, best_kills);
 	}
 
-	if (_point.x + 1 < 8 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x + 1] != nullptr && _board[_point.y + 1][_point.x + 1]->isWhite() != this->white && _point.x + 2 < 8 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x + 2] == nullptr)
+	if (_point.x + 1 < 8 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x + 1] != nullptr && _board[_point.y + 1][_point.x + 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x + 1, _point.y + 1)) == _kills.end() && _point.x + 2 < 8 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x + 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back(Point(_point.x + 1, _point.y + 1));
 		_get_more_kills(_board, Point(_point.x + 2, _point.y + 2), copy, best_kills);
 	}
 
-	if (_point.x - 1 >= 0 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x - 1] != nullptr && _board[_point.y - 1][_point.x - 1]->isWhite() != this->white && _point.x - 2 >= 0 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x - 2] == nullptr)
+	if (_point.x - 1 >= 0 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x - 1] != nullptr && _board[_point.y - 1][_point.x - 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x - 1, _point.y - 1)) == _kills.end() && _point.x - 2 >= 0 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x - 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back(Point(_point.x - 1, _point.y - 1));
 		_get_more_kills(_board, Point(_point.x - 2, _point.y - 2), copy, best_kills);
 	}
 
-	if (_point.x + 1 < 8 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x + 1] != nullptr && _board[_point.y - 1][_point.x + 1]->isWhite() != this->white && _point.x + 2 < 8 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x + 2] == nullptr)
+	if (_point.x + 1 < 8 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x + 1] != nullptr && _board[_point.y - 1][_point.x + 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x + 1, _point.y - 1)) == _kills.end() && _point.x + 2 < 8 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x + 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back(Point(_point.x + 1, _point.y - 1));

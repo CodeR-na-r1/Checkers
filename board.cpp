@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Board.h"
-#include "Checher.h"
 
 Board::Board()
 {

@@ -2,6 +2,7 @@
 
 #include "Figure.h"
 #include "Point_2D.h"
+#include "Checher.h"
 
 #include <fstream>
 #include <string>

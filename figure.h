@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Point_2D.h"
 #include "Point.h"
 #include <vector>

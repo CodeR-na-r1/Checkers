@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Point.h"
 
 Point::Point()
@@ -10,4 +12,9 @@ Point::Point(int _x, int _y)
 {
 	this->x = _x;
 	this->y = _y;
+}
+
+bool Point::operator==(const Point& other) const
+{
+	return this->x == other.x && this->y == other.y;
 }
