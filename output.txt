@@ -1,0 +1,13 @@
+White
+F2
+H2
+G3
+Black
+E1
+G5
+A7
+E7
+G7
+B8
+D8
+H8

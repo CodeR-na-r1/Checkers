@@ -145,6 +145,35 @@ ostream& operator<<(ostream& out, const Board& _board)
 	return out;
 }
 
+ofstream& operator <<(ofstream& out, const Board& board)
+{
+	out << string("White") << endl;
+	for (int i = 0; i < 8; i++)		// y
+	{
+		for (int j = 0; j < 8; j++)		// x
+		{
+			if (board.board[i][j] != nullptr && board.board[i][j]->isWhite())
+			{
+				out << char(j + 65) << i + 1 << endl;
+			}
+		}
+	}
+
+	out << string("Black");
+	for (int i = 0; i < 8; i++)		// y
+	{
+		for (int j = 0; j < 8; j++)		// x
+		{
+			if (board.board[i][j] != nullptr && !board.board[i][j]->isWhite())
+			{
+				out << endl << char(j + 65) << i + 1;
+			}
+		}
+	}
+
+	return out;
+}
+
 Board::~Board()
 {
 	for (int i = 0; i < 8; ++i)

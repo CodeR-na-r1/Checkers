@@ -21,5 +21,7 @@ public:
 
 	friend ostream& operator<<(ostream& out, const Board& board);
 
+	friend ofstream& operator <<(ofstream& out, const Board& board);
+
 	~Board();
 };
