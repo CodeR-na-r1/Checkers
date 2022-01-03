@@ -59,7 +59,7 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 		{
 			if (this->board[i][j] == nullptr || this->board[i][j]->isWhite() != _isWhite) continue;
 			temp_moves.clear();
-			this->board[i][j]->get_possible_moveS(this->board, !_isWhite, Point(j, i), temp_moves);
+			this->board[i][j]->get_possible_moveS(this->board, Point(j, i), temp_moves);
 			for (int z = 0; z < temp_moves.size(); z++)
 			{
 				all_moves.push_back(temp_moves[i]);
@@ -90,7 +90,7 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 
 			for (int i = 0; i < all_future_moves.size(); ++i)
 			{
-				this->board[all_future_moves[i].first.from.y][all_future_moves[i].first.from.x]->get_possible_moveS(this->board, !_isWhite, Point(all_future_moves[i].second.to.x, all_future_moves[i].second.to.y), temp_moves);
+				this->board[all_future_moves[i].first.from.y][all_future_moves[i].first.from.x]->get_possible_moveS(this->board, Point(all_future_moves[i].second.to.x, all_future_moves[i].second.to.y), temp_moves);
 				for (int z = 0; z < temp_moves.size(); z++)
 				{
 					temp_all_future_moves.push_back( pair<Point_2D, Point_2D>(all_future_moves[i].first, temp_moves[z]) );
