@@ -14,6 +14,9 @@ Board::Board()
 		}
 	}
 
+	this->count = 0;
+	this->count_white = 0;
+
 	return;
 }
 
@@ -34,6 +37,8 @@ Board::Board(const char* namefile) : Board()
 			try
 			{
 				this->board[temp[1] - '0' - 1][temp[0] - '0' - 17] = new Checher(isWhite);
+				if (isWhite) ++this->count_white;
+				++this->count;
 			}
 			catch(...)
 			{
@@ -61,7 +66,7 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 			this->board[i][j]->get_possible_moveS(this->board, Point(j, i), temp_moves);
 			for (int z = 0; z < temp_moves.size(); z++)
 			{
-				all_moves.push_back(temp_moves[i]);
+				all_moves.push_back(temp_moves[z]);
 			}
 		}
 	}
@@ -116,8 +121,34 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 	return res;
 }
 
+void Board::do_move(const Point_2D& _move_point)
+{
+	if (_move_point.to > Point(7,7) || _move_point.from > Point(7, 7) || _move_point.to < Point(0, 0) || _move_point.from < Point(0, 0))
+		throw "Error points in parameter  (from 'do_move')";
+
+	bool color_moving_figure = this->board[_move_point.from.y][_move_point.from.x]->isWhite();
+
+	this->board[_move_point.to.y][_move_point.to.x] = new Checher(color_moving_figure);
+	this->board[_move_point.from.y][_move_point.from.x]->~Figure();
+	this->board[_move_point.from.y][_move_point.from.x] = nullptr;
+
+	for (int i = 0; i < _move_point.kills.size(); i++)
+	{
+		if (this->board[_move_point.kills[i].y][_move_point.kills[i].x] == nullptr) throw "Error points of kills in parameter  (from 'do_move')";
+		this->board[_move_point.kills[i].y][_move_point.kills[i].x]->~Figure();
+		this->board[_move_point.kills[i].y][_move_point.kills[i].x] = nullptr;
+	}
+
+	this->count -= _move_point.kills.size();
+	if (!color_moving_figure) this->count_white -= _move_point.kills.size();
+
+	return;
+}
+
 ostream& operator<<(ostream& out, const Board& _board)
 {
+	out << "Board: white figures == " << _board.count_white << "; black figures == " << _board.count - _board.count_white << endl;
+
 	for (int i = 7; i >= 0; --i)
 	{
 		out << i + 1 << ' ';
@@ -146,8 +177,8 @@ ostream& operator<<(ostream& out, const Board& _board)
 
 ofstream& operator <<(ofstream& out, const Board& board)
 {
-	out << string("White") << endl;
-	for (int i = 0; i < 8; i++)		// y
+	out << string("White: ") << board.count_white << endl;
+	for (int i = 0; i < 8; i++)			// y
 	{
 		for (int j = 0; j < 8; j++)		// x
 		{
@@ -158,8 +189,8 @@ ofstream& operator <<(ofstream& out, const Board& board)
 		}
 	}
 
-	out << string("Black");
-	for (int i = 0; i < 8; i++)		// y
+	out << string("Black: ") << board.count - board.count_white;
+	for (int i = 0; i < 8; i++)			// y
 	{
 		for (int j = 0; j < 8; j++)		// x
 		{

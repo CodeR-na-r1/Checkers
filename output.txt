@@ -1,13 +1,5 @@
-White
-F2
-H2
-G3
-Black
-E1
+White: 1
+E3
+Black: 2
 G5
-A7
-E7
-G7
-B8
-D8
-H8
+H5
