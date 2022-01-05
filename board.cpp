@@ -16,6 +16,7 @@ Board::Board()
 
 	this->count = 0;
 	this->count_white = 0;
+	this->_end_game = false;
 
 	return;
 }
@@ -142,7 +143,53 @@ void Board::do_move(const Point_2D& _move_point)
 	this->count -= _move_point.kills.size();
 	if (!color_moving_figure) this->count_white -= _move_point.kills.size();
 
+	if (this->count_white == 0 || this->count - this->count_white == 0)
+		this->_end_game = true;
+
 	return;
+}
+
+void Board::notation(const Point_2D& _point) const
+{
+	if (this->board[_point.from.y][_point.from.x] == nullptr)
+	{
+		throw "Error point in 'notation'!";
+	}
+
+	bool color_move_figure = this->board[_point.from.y][_point.from.x]->isWhite();
+
+	if (color_move_figure)
+	{
+		cout << "White: ";
+	}
+	else
+	{
+		cout << "Black: ";
+	}
+
+	cout << char(_point.from.x + 65) << _point.from.y + 1;
+	cout << " -> ";
+	cout << char(_point.to.x + 65) << _point.to.y + 1;
+	cout << " || Kills === " << _point.kills.size();
+
+	if (_point.kills.size())
+	{
+		cout << " (" << char(_point.kills[0].x + 65) << _point.kills[0].y + 1;
+		for (int i = 1; i < _point.kills.size(); ++i)
+		{
+			cout << ", " << char(_point.kills[i].x + 65) << _point.kills[i].y + 1;
+		}
+		cout << ")";
+	}
+	
+	cout << endl;
+
+	return;
+}
+
+bool Board::end_game() const
+{
+	return this->_end_game;
 }
 
 ostream& operator<<(ostream& out, const Board& _board)

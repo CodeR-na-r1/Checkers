@@ -16,8 +16,20 @@ int main()
 	out << *board;
 	out.close();
 
-	Point_2D move = board->get_effective_move(0);
-	board->do_move(move);
+	bool who_move = true;
+
+	while (true)
+	{
+		Point_2D move = board->get_effective_move(who_move);
+		board->notation(move);
+		board->do_move(move);
+
+		if (board->end_game())
+			break;
+
+		who_move = !who_move;
+	}
+
 	cout << *board;
 
 	return 0;
