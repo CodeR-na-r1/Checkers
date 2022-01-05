@@ -28,6 +28,7 @@ int main()
 			break;
 
 		who_move = !who_move;
+		cout << *board << endl << endl;
 	}
 
 	cout << *board;

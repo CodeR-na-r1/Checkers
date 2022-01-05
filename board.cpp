@@ -146,6 +146,13 @@ void Board::do_move(const Point_2D& _move_point)
 	if (this->count_white == 0 || this->count - this->count_white == 0)
 		this->_end_game = true;
 
+	if ((_move_point.to.y == 7 && this->board[_move_point.to.y][_move_point.to.x]->isWhite()) || (_move_point.to.y == 0 && !this->board[_move_point.to.y][_move_point.to.x]->isWhite()))
+	{
+		bool color_figure = this->board[_move_point.to.y][_move_point.to.x]->isWhite();
+		this->board[_move_point.to.y][_move_point.to.x]->~Figure();
+		this->board[_move_point.to.y][_move_point.to.x] = new King(color_figure);
+	}
+
 	return;
 }
 
@@ -202,13 +209,12 @@ ostream& operator<<(ostream& out, const Board& _board)
 		for (int j = 0; j < 8; ++j)
 		{
 			if (_board.board[i][j] == nullptr)
-				out<<"X ";
-			else if (_board.board[i][j]->isWhite())
-				out<<"W ";
-			else if (_board.board[i][j]->isWhite() == false)
-				out<<"B ";
+				out << "X ";
 			else
-				throw "Error output figures on board on console";
+			{
+				cout << _board.board[i][j]->output() << " ";
+
+			}
 		}
 		out << endl;
 	}

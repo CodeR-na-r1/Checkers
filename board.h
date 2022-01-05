@@ -3,6 +3,7 @@
 #include "Figure.h"
 #include "Point_2D.h"
 #include "Checher.h"
+#include "king.h"
 
 #include <fstream>
 #include <iostream>

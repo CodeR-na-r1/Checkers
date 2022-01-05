@@ -89,6 +89,11 @@ void Checher::get_possible_moveS(Figure*** _board, const Point& _point, vector<P
 	return;
 }
 
+const char* Checher::output()
+{
+	return this->isWhite() ? "w" : "b";
+}
+
 Checher::~Checher()
 {
 

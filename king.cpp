@@ -175,6 +175,11 @@ void King::get_possible_moveS(Figure*** _board, const Point& _point, vector<Poin
 	return;
 }
 
+const char* King::output()
+{
+	return this->isWhite() ? "W" : "B";
+}
+
 King::~King()
 {
 
