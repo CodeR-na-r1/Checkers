@@ -127,9 +127,7 @@ void Board::do_move(const Point_2D& _move_point)
 	if (_move_point.to > Point(7,7) || _move_point.from > Point(7, 7) || _move_point.to < Point(0, 0) || _move_point.from < Point(0, 0))
 		throw "Error points in parameter  (from 'do_move')";
 
-	bool color_moving_figure = this->board[_move_point.from.y][_move_point.from.x]->isWhite();
-
-	this->board[_move_point.to.y][_move_point.to.x] = new Checher(color_moving_figure);
+	this->board[_move_point.to.y][_move_point.to.x] = this->board[_move_point.from.y][_move_point.from.x];
 	this->board[_move_point.from.y][_move_point.from.x]->~Figure();
 	this->board[_move_point.from.y][_move_point.from.x] = nullptr;
 
@@ -141,7 +139,7 @@ void Board::do_move(const Point_2D& _move_point)
 	}
 
 	this->count -= _move_point.kills.size();
-	if (!color_moving_figure) this->count_white -= _move_point.kills.size();
+	if (!this->board[_move_point.to.y][_move_point.to.x]->isWhite()) this->count_white -= _move_point.kills.size();
 
 	if (this->count_white == 0 || this->count - this->count_white == 0)
 		this->_end_game = true;
