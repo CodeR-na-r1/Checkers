@@ -12,7 +12,9 @@ public:
 
 	King(const bool _isWhite);
 
-	virtual bool isWhite() const override;
+	virtual const bool isWhite() const override;
+
+	virtual const bool isKing() const override;
 
 	virtual void _get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills) override;
 

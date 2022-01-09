@@ -12,9 +12,14 @@ King::King(const bool _isWhite) : Figure()
 	return;
 }
 
-bool King::isWhite() const
+const bool King::isWhite() const
 {
 	return this->white;
+}
+
+const bool King::isKing() const
+{
+	return true;
 }
 
 void King::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills)

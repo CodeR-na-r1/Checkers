@@ -9,9 +9,14 @@ Checher::Checher(const bool _isWhite) : Figure()
 	this->white = _isWhite;
 }
 
-bool Checher::isWhite() const
+const bool Checher::isWhite() const
 {
 	return this->white;
+}
+
+const bool Checher::isKing() const
+{
+	return false;
 }
 
 void Checher::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills)

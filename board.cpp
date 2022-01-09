@@ -37,9 +37,18 @@ Board::Board(const char* namefile) : Board()
 		{
 			try
 			{
-				this->board[temp[1] - '0' - 1][temp[0] - '0' - 17] = new Checher(isWhite);
-				if (isWhite) ++this->count_white;
-				++this->count;
+				if (temp[0] != 'M')
+				{
+					this->board[temp[1] - '0' - 1][temp[0] - '0' - 17] = new Checher(isWhite);
+					if (isWhite) ++this->count_white;
+					++this->count;
+				}
+				else
+				{
+					this->board[temp[2] - '0' - 1][temp[1] - '0' - 17] = new King(isWhite);
+					if (isWhite) ++this->count_white;
+					++this->count;
+				}
 			}
 			catch(...)
 			{
@@ -240,6 +249,10 @@ ofstream& operator <<(ofstream& out, const Board& board)
 		{
 			if (board.board[i][j] != nullptr && board.board[i][j]->isWhite())
 			{
+				if (board.board[i][j]->isKing())
+				{
+					out << 'M';
+				}
 				out << char(j + 65) << i + 1 << endl;
 			}
 		}
@@ -252,7 +265,12 @@ ofstream& operator <<(ofstream& out, const Board& board)
 		{
 			if (board.board[i][j] != nullptr && !board.board[i][j]->isWhite())
 			{
-				out << endl << char(j + 65) << i + 1;
+				out << endl;
+				if (board.board[i][j]->isKing())
+				{
+					out << 'M';
+				}
+				out << char(j + 65) << i + 1;
 			}
 		}
 	}

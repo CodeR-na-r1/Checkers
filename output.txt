@@ -3,11 +3,11 @@ F2
 H2
 G3
 Black: 8
-E1
+ME1
 G5
 A7
 E7
-G7
+MG7
 B8
 D8
 H8
