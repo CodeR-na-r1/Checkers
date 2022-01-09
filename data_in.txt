@@ -1,7 +1,13 @@
 White: 3
-A6
-F7
-F5
+F2
+G3
+H2
 Black: 8
-B7
-G8
+A7
+B8
+D8
+E7
+E1
+G7
+G5
+H8

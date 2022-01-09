@@ -197,6 +197,11 @@ bool Board::end_game() const
 	return this->_end_game;
 }
 
+bool Board::white_is_win() const
+{
+	return this->count_white ? true : false;
+}
+
 ostream& operator<<(ostream& out, const Board& _board)
 {
 	out << "Board: white figures == " << _board.count_white << "; black figures == " << _board.count - _board.count_white << endl;

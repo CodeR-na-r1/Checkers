@@ -31,7 +31,9 @@ int main()
 		cout << *board << endl << endl;
 	}
 
-	cout << *board;
+	cout << *board << endl << endl;
+
+	board->white_is_win() ? cout << "White is win!\n" : cout << "Black is win!\n";
 
 	return 0;
 }

@@ -30,6 +30,8 @@ public:
 
 	bool end_game() const;
 
+	bool white_is_win() const;
+
 	friend ostream& operator<<(ostream& out, const Board& board);
 
 	friend ofstream& operator <<(ofstream& out, const Board& board);
