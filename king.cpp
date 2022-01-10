@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "King.h"
 
@@ -23,16 +23,16 @@ const bool King::isKing() const
 
 void King::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills)
 {
-	// Проверка границ, наличия фигуры, цвета фигуры, то, что еще не сбивали ее в этом ходе, будущие границы (куда встает фигура) и отсутсвие фигуры на клетке куда ходим
-	// Вверх влево
+	// РџСЂРѕРІРµСЂРєР° РіСЂР°РЅРёС†, РЅР°Р»РёС‡РёСЏ С„РёРіСѓСЂС‹, С†РІРµС‚Р° С„РёРіСѓСЂС‹, С‚Рѕ, С‡С‚Рѕ РµС‰Рµ РЅРµ СЃР±РёРІР°Р»Рё РµРµ РІ СЌС‚РѕРј С…РѕРґРµ, Р±СѓРґСѓС‰РёРµ РіСЂР°РЅРёС†С‹ (РєСѓРґР° РІСЃС‚Р°РµС‚ С„РёРіСѓСЂР°) Рё РѕС‚СЃСѓС‚СЃРІРёРµ С„РёРіСѓСЂС‹ РЅР° РєР»РµС‚РєРµ РєСѓРґР° С…РѕРґРёРј
+	// Р’РІРµСЂС… РІР»РµРІРѕ
 	bool finded_enemy(false);
-	// Как у шашки, но проверяем диагонали
+	// РљР°Рє Сѓ С€Р°С€РєРё, РЅРѕ РїСЂРѕРІРµСЂСЏРµРј РґРёР°РіРѕРЅР°Р»Рё
 	for (int i(_point.y+1), j(_point.x-1); i < 8 && j >= 0; i++, j--)
 	{
 		if (finded_enemy)
 		{
 			vector<Point> copy = _kills;
-			copy.push_back(Point(j+1, i-1));	// Координаты врага, обнаруженного на предыдущей итерации (подгоняем координаты)
+			copy.push_back(Point(j+1, i-1));	// РљРѕРѕСЂРґРёРЅР°С‚С‹ РІСЂР°РіР°, РѕР±РЅР°СЂСѓР¶РµРЅРЅРѕРіРѕ РЅР° РїСЂРµРґС‹РґСѓС‰РµР№ РёС‚РµСЂР°С†РёРё (РїРѕРґРіРѕРЅСЏРµРј РєРѕРѕСЂРґРёРЅР°С‚С‹)
 			_get_more_kills(_board, Point(j, i), copy, best_kills);
 			break;
 		}
@@ -44,7 +44,7 @@ void King::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>&
 
 			if (_board[i][j]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(j, i)) == _kills.end() && i + 1 < 8 && j - 1 >= 0 && _board[i + 1][j - 1] == nullptr)
 			{
-				finded_enemy = true;	// Если нашли врага, то поднимаем флаг и переходим на следующую итерацию, откуда идем в рекурсию
+				finded_enemy = true;	// Р•СЃР»Рё РЅР°С€Р»Рё РІСЂР°РіР°, С‚Рѕ РїРѕРґРЅРёРјР°РµРј С„Р»Р°Рі Рё РїРµСЂРµС…РѕРґРёРј РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ РёС‚РµСЂР°С†РёСЋ, РѕС‚РєСѓРґР° РёРґРµРј РІ СЂРµРєСѓСЂСЃРёСЋ
 				continue;
 			}
 		}
@@ -139,7 +139,7 @@ void King::get_possible_moveS(Figure*** _board, const Point& _point, vector<Poin
 {
 	vector<Point> kills;
 	Point_2D _best_kill;
-	_get_more_kills(_board, _point, kills, _best_kill);	// Проверяем и получаем ход с убийствами, если есть убийства
+	_get_more_kills(_board, _point, kills, _best_kill);	// РџСЂРѕРІРµСЂСЏРµРј Рё РїРѕР»СѓС‡Р°РµРј С…РѕРґ СЃ СѓР±РёР№СЃС‚РІР°РјРё, РµСЃР»Рё РµСЃС‚СЊ СѓР±РёР№СЃС‚РІР°
 		
 	if (_best_kill.kills.size())
 	{
@@ -147,7 +147,7 @@ void King::get_possible_moveS(Figure*** _board, const Point& _point, vector<Poin
 		return;
 	}
 
-	// Иначе стандартные ходы для фигуры соответсвенного цвета
+	// РРЅР°С‡Рµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ С…РѕРґС‹ РґР»СЏ С„РёРіСѓСЂС‹ СЃРѕРѕС‚РІРµС‚СЃРІРµРЅРЅРѕРіРѕ С†РІРµС‚Р°
 	for (int i(_point.y + 1), j(_point.x - 1); i < 8 && j >= 0; i++, j--)
 	{
 		if (_board[i][j] != nullptr)

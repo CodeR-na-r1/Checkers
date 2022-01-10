@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -11,25 +11,25 @@ int main()
 	
 	cout << *board << endl << endl;
 	
-	bool who_move = true;	// цвет ходящей фигуры
-	int draw = 0;	// Счетчик условия ничьи
+	bool who_move = true;	// С†РІРµС‚ С…РѕРґСЏС‰РµР№ С„РёРіСѓСЂС‹
+	int draw = 0;	// РЎС‡РµС‚С‡РёРє СѓСЃР»РѕРІРёСЏ РЅРёС‡СЊРё
 	
 	ofstream out;
-	out.open("notation_output.txt");	// файл с нотациями
+	out.open("notation_output.txt");	// С„Р°Р№Р» СЃ РЅРѕС‚Р°С†РёСЏРјРё
 
 	while (true)
 	{
-		Point_2D move = board->get_effective_move(who_move);	// Получение лучшего хода для фигур конкретного цвета
-		board->notation(move, cout);	// Выввод нотаций на экран
-		board->notation(move, out);	// Выввод нотаций в файл
-		board->do_move(move);	// Делаем ход
+		Point_2D move = board->get_effective_move(who_move);	// РџРѕР»СѓС‡РµРЅРёРµ Р»СѓС‡С€РµРіРѕ С…РѕРґР° РґР»СЏ С„РёРіСѓСЂ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ С†РІРµС‚Р°
+		board->notation(move, cout);	// Р’С‹РІРІРѕРґ РЅРѕС‚Р°С†РёР№ РЅР° СЌРєСЂР°РЅ
+		board->notation(move, out);	// Р’С‹РІРІРѕРґ РЅРѕС‚Р°С†РёР№ РІ С„Р°Р№Р»
+		board->do_move(move);	// Р”РµР»Р°РµРј С…РѕРґ
 
-		if (board->end_game())	// Условие окончания партии
+		if (board->end_game())	// РЈСЃР»РѕРІРёРµ РѕРєРѕРЅС‡Р°РЅРёСЏ РїР°СЂС‚РёРё
 			break;
 
-		who_move = !who_move;	// Смена цвета ходящей фигуры
+		who_move = !who_move;	// РЎРјРµРЅР° С†РІРµС‚Р° С…РѕРґСЏС‰РµР№ С„РёРіСѓСЂС‹
 		cout << *board << endl << endl;
-		if (++draw > 31)	// Условие ничьи
+		if (++draw > 31)	// РЈСЃР»РѕРІРёРµ РЅРёС‡СЊРё
 			break;
 	}
 
@@ -37,7 +37,7 @@ int main()
 
 	cout << *board << endl << endl;
 
-	if (draw > 31)	// Выввод результата окончания партии
+	if (draw > 31)	// Р’С‹РІРІРѕРґ СЂРµР·СѓР»СЊС‚Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ РїР°СЂС‚РёРё
 		cout << "no one won! (draw)\n";
 	else
 		board->white_is_win() ? cout << "White is win!\n" : cout << "Black is win!\n";
