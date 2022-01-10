@@ -4,10 +4,11 @@
 
 Point_2D::Point_2D()
 {
-
+	this->enemy_kills_after_move = 0;
+	this->ratio = 0;
 }
 
-Point_2D::Point_2D(Point _to, Point _from)
+Point_2D::Point_2D(Point _to, Point _from) : Point_2D()
 {
 	this->to = _to;
 	this->from = _from;

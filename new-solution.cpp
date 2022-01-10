@@ -17,6 +17,7 @@ int main()
 	out.close();
 
 	bool who_move = true;
+	int draw = 0;
 
 	while (true)
 	{
@@ -29,11 +30,16 @@ int main()
 
 		who_move = !who_move;
 		cout << *board << endl << endl;
+		if (++draw > 31)
+			break;
 	}
 
 	cout << *board << endl << endl;
 
-	board->white_is_win() ? cout << "White is win!\n" : cout << "Black is win!\n";
+	if (draw > 31)
+		cout << "no one won! (draw)\n";
+	else
+		board->white_is_win() ? cout << "White is win!\n" : cout << "Black is win!\n";
 
 	return 0;
 }

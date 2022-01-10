@@ -9,6 +9,8 @@ struct Point_2D
 {
 	Point to, from;
 	vector<Point> kills;
+	int enemy_kills_after_move;
+	int ratio;	// коэффициент
 
 	Point_2D();
 	Point_2D(Point _to, Point _from);

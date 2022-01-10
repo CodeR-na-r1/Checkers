@@ -63,10 +63,33 @@ Board::Board(const char* namefile) : Board()
 	return;
 }
 
+Board::Board(const Board& _board) : Board()
+{
+	this->count = _board.count;
+	this->count_white = _board.count_white;
+	this->_end_game = _board._end_game;
+
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			if (_board.board[i][j] == nullptr)
+				this->board[i][j] = nullptr;
+			else if (_board.board[i][j]->isKing())
+				this->board[i][j] = new King(_board.board[i][j]->isWhite());
+			else
+				this->board[i][j] = new Checher(_board.board[i][j]->isWhite());
+		}
+	}
+
+	return;
+}
+
 Point_2D Board::get_effective_move(const bool _isWhite)
 {
 	vector<Point_2D> temp_moves;
 	vector<Point_2D> all_moves;
+	bool fook = false;
 	for (int i = 7; i >= 0; --i)
 	{
 		for (int j = 0; j < 8; ++j)
@@ -76,59 +99,134 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 			this->board[i][j]->get_possible_moveS(this->board, Point(j, i), temp_moves);
 			for (int z = 0; z < temp_moves.size(); z++)
 			{
+				if (!fook && temp_moves[z].kills.size())
+				{
+					fook = true;
+					all_moves.clear();
+				}
+
+				if (fook && temp_moves[z].kills.size() == 0)
+				{
+					continue;
+				}
+
+				temp_moves[z].enemy_kills_after_move = _enemy_kills_after_move(temp_moves[z]);
+				temp_moves[z].ratio = _calc_ratio(temp_moves[z]);
 				all_moves.push_back(temp_moves[z]);
 			}
 		}
 	}
 
+	if (fook)
+	{
+
+	}
+
 	Point_2D res;
+	res.ratio = -999;
 	for (int i = 0; i < all_moves.size(); ++i)
 	{
-		if (all_moves[i] > res)
+		if (all_moves[i].ratio > res.ratio)
 			res = all_moves[i];
 	}
 
-	if (!res.kills.size())
+	if (res.ratio > 0 || res.ratio < 0)
+		return res;
+
+
+	int max_count(4), max_ratio(-999);
+	vector<pair<Point_2D, Point_2D>> all_future_moves;
+	vector<pair<Point_2D, Point_2D>> temp_all_future_moves;
+	for (int i = 0; i < all_moves.size(); i++)
 	{
-		int max_count(4), max_kill(0);
-		vector<pair<Point_2D, Point_2D>> all_future_moves;
-		vector<pair<Point_2D, Point_2D>> temp_all_future_moves;
-		for (int i = 0; i < all_moves.size(); i++)
+		all_future_moves.push_back(pair<Point_2D, Point_2D>(all_moves[i], all_moves[i]));		// Самый первый ход, а вторая пара - будущие ходы
+	}
+
+	while (max_count)
+	{
+		max_ratio = -999;
+		for (auto it = all_future_moves.begin(); it < all_future_moves.end(); it++)
 		{
-			all_future_moves.push_back( pair<Point_2D, Point_2D>(all_moves[i], all_moves[i]) );		// Самый первый ход, а вторая пара - будущие ходы
+			if (it->second.ratio != 0)
+				it = all_future_moves.erase(it);
+		}
+		temp_all_future_moves.clear();
+
+		for (int i = 0; i < all_future_moves.size(); ++i)
+		{
+			this->board[all_future_moves[i].first.from.y][all_future_moves[i].first.from.x]->get_possible_moveS(this->board, Point(all_future_moves[i].second.to.x, all_future_moves[i].second.to.y), temp_moves);
+			for (int z = 0; z < temp_moves.size(); z++)
+			{
+				temp_moves[z].enemy_kills_after_move = _enemy_kills_after_move(Point_2D(temp_moves[z].to, all_future_moves[i].first.from));
+				temp_moves[z].ratio = _calc_ratio(temp_moves[z]);
+				temp_all_future_moves.push_back(pair<Point_2D, Point_2D>(all_future_moves[i].first, temp_moves[z]));
+			}
+			temp_moves.clear();
 		}
 
-		while (max_count)
+		for (int z = 0; z < temp_all_future_moves.size(); z++)
 		{
-			temp_all_future_moves.clear();
-
-			for (int i = 0; i < all_future_moves.size(); ++i)
+			if (temp_all_future_moves[z].second.ratio > max_ratio)
 			{
-				this->board[all_future_moves[i].first.from.y][all_future_moves[i].first.from.x]->get_possible_moveS(this->board, Point(all_future_moves[i].second.to.x, all_future_moves[i].second.to.y), temp_moves);
-				for (int z = 0; z < temp_moves.size(); z++)
-				{
-					temp_all_future_moves.push_back( pair<Point_2D, Point_2D>(all_future_moves[i].first, temp_moves[z]) );
-				}
-				temp_moves.clear();
+				max_ratio = temp_all_future_moves[z].second.ratio;
+				res = temp_all_future_moves[z].first;
 			}
-
-			for (int z = 0; z < temp_all_future_moves.size(); z++)
-			{
-				if (temp_all_future_moves[z].second.kills.size() > max_kill)
-				{
-					max_kill = temp_all_future_moves[z].second.kills.size();
-					res = temp_all_future_moves[z].first;
-				}
-			}
-			if (max_kill)
-				break;
-
-			all_future_moves = temp_all_future_moves;
-			--max_count;
 		}
+		if (max_ratio != 0)
+			break;
+
+		all_future_moves = temp_all_future_moves;
+		--max_count;
 	}
 
 	return res;
+}
+
+int Board::_enemy_kills_after_move(const Point_2D& _point) const
+{
+	Board board = *this;
+
+	bool color = board.board[_point.from.y][_point.from.x]->isWhite();
+
+	board.board[_point.from.y][_point.from.x]->~Figure();
+	board.board[_point.from.y][_point.from.x] = nullptr;
+
+	board.board[_point.to.y][_point.to.x] = new Checher(color);
+
+	vector<Point_2D> temp_moves;
+	Point_2D best_enemy_move;
+	bool enemy_color = !color;
+	for (int i = 7; i >= 0; --i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			if (board.board[i][j] == nullptr || board.board[i][j]->isWhite() != enemy_color) continue;
+			temp_moves.clear();
+			board.board[i][j]->get_possible_moveS(board.board, Point(j, i), temp_moves);
+			for (int z = 0; z < temp_moves.size(); z++)
+			{
+				if (temp_moves[z] > best_enemy_move)
+					best_enemy_move = temp_moves[z];
+			}
+		}
+	}
+	
+	if (find(best_enemy_move.kills.begin(), best_enemy_move.kills.end(), Point(_point.to.x, _point.to.y)) == best_enemy_move.kills.end())
+		return 0;
+	else
+		return best_enemy_move.kills.size();
+}
+
+int Board::_calc_ratio(const Point_2D& _point) const
+{
+	if (_point.enemy_kills_after_move)
+	{
+		return _point.kills.size() - _point.enemy_kills_after_move;
+	}
+	else
+	{
+		return _point.kills.size() * 2;
+	}
 }
 
 void Board::do_move(const Point_2D& _move_point)
@@ -209,6 +307,28 @@ bool Board::end_game() const
 bool Board::white_is_win() const
 {
 	return this->count_white ? true : false;
+}
+
+Board& Board::operator=(const Board& _board)
+{
+	this->count = _board.count;
+	this->count_white = _board.count_white;
+	this->_end_game = _board._end_game;
+
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			if (_board.board[i][j] == nullptr)
+				this->board[i][j] = nullptr;
+			else if (_board.board[i][j]->isKing())
+				this->board[i][j] = new King(_board.board[i][j]->isWhite());
+			else
+				this->board[i][j] = new Checher(_board.board[i][j]->isWhite());
+		}
+	}
+
+	return *this;
 }
 
 ostream& operator<<(ostream& out, const Board& _board)
