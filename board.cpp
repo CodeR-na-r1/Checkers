@@ -261,7 +261,7 @@ void Board::do_move(const Point_2D& _move_point)
 	return;
 }
 
-void Board::notation(const Point_2D& _point) const
+void Board::notation(const Point_2D& _point, ostream& _out) const
 {
 	if (this->board[_point.from.y][_point.from.x] == nullptr)
 	{
@@ -272,29 +272,29 @@ void Board::notation(const Point_2D& _point) const
 
 	if (color_move_figure)
 	{
-		cout << "White: ";
+		_out << "White: ";
 	}
 	else
 	{
-		cout << "Black: ";
+		_out << "Black: ";
 	}
 
-	cout << char(_point.from.x + 65) << _point.from.y + 1;
-	cout << " -> ";
-	cout << char(_point.to.x + 65) << _point.to.y + 1;
-	cout << " || Kills === " << _point.kills.size();
+	_out << char(_point.from.x + 65) << _point.from.y + 1;
+	_out << " -> ";
+	_out << char(_point.to.x + 65) << _point.to.y + 1;
+	_out << " || Kills === " << _point.kills.size();
 
 	if (_point.kills.size())
 	{
-		cout << " (" << char(_point.kills[0].x + 65) << _point.kills[0].y + 1;
+		_out << " (" << char(_point.kills[0].x + 65) << _point.kills[0].y + 1;
 		for (int i = 1; i < _point.kills.size(); ++i)
 		{
-			cout << ", " << char(_point.kills[i].x + 65) << _point.kills[i].y + 1;
+			_out << ", " << char(_point.kills[i].x + 65) << _point.kills[i].y + 1;
 		}
-		cout << ")";
+		_out << ")";
 	}
 	
-	cout << endl;
+	_out << endl;
 
 	return;
 }

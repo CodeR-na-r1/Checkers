@@ -1,13 +1,4 @@
-White: 3
-F2
-H2
-G3
-Black: 8
-ME1
-G5
-A7
-E7
-MG7
-B8
-D8
-H8
+White: 1
+MC5
+Black: 1
+MH8

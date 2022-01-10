@@ -1,0 +1,32 @@
+White: G3 -> H4 || Kills === 0
+Black: E1 -> G3 || Kills === 1 (F2)
+White: H2 -> D6 || Kills === 4 (G3, G5, G7, E7)
+Black: D8 -> C7 || Kills === 0
+White: D6 -> E7 || Kills === 0
+Black: H8 -> G7 || Kills === 0
+White: E7 -> F8 || Kills === 0
+Black: A7 -> B6 || Kills === 0
+White: F8 -> H6 || Kills === 1 (G7)
+Black: B8 -> A7 || Kills === 0
+White: H6 -> F4 || Kills === 0
+Black: B6 -> C5 || Kills === 0
+White: F4 -> B8 || Kills === 1 (C7)
+Black: A7 -> B6 || Kills === 0
+White: B8 -> A7 || Kills === 0
+Black: B6 -> A5 || Kills === 0
+White: A7 -> D4 || Kills === 1 (C5)
+Black: A5 -> B4 || Kills === 0
+White: D4 -> E5 || Kills === 0
+Black: B4 -> A3 || Kills === 0
+White: E5 -> D6 || Kills === 0
+Black: A3 -> B2 || Kills === 0
+White: D6 -> A3 || Kills === 0
+Black: B2 -> A1 || Kills === 0
+White: H4 -> G5 || Kills === 0
+Black: A1 -> C3 || Kills === 0
+White: G5 -> H6 || Kills === 0
+Black: C3 -> A5 || Kills === 0
+White: H6 -> G7 || Kills === 0
+Black: A5 -> C3 || Kills === 0
+White: A3 -> C5 || Kills === 0
+Black: C3 -> H8 || Kills === 1 (G7)

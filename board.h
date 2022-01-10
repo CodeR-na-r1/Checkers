@@ -31,7 +31,7 @@ public:
 
 	void do_move(const Point_2D& _move_point);
 
-	void notation(const Point_2D& _point) const;
+	void notation(const Point_2D& _point, ostream& out) const;
 
 	bool end_game() const;
 
