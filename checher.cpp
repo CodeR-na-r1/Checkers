@@ -21,27 +21,29 @@ const bool Checher::isKing() const
 
 void Checher::_get_more_kills(Figure*** _board, const Point& _point, vector<Point>& _kills, Point_2D& best_kills)
 {
+	// Проверка границ, наличия фигуры, цвета фигуры, то, что еще не сбивали ее в этом ходе, будущие границы (куда встает фигура) и отсутсвие фигуры на клетке куда ходим
+	// Вверх влево
 	if (_point.x - 1 >= 0 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x - 1] != nullptr && _board[_point.y + 1][_point.x - 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x - 1, _point.y + 1)) == _kills.end() && _point.x - 2 >= 0 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x - 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back( Point(_point.x - 1, _point.y + 1) );
 		_get_more_kills(_board, Point(_point.x - 2, _point.y + 2), copy, best_kills);
 	}
-
+	// Вверх вправо
 	if (_point.x + 1 < 8 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x + 1] != nullptr && _board[_point.y + 1][_point.x + 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x + 1, _point.y + 1)) == _kills.end() && _point.x + 2 < 8 && _point.y + 2 < 8 && _board[_point.y + 2][_point.x + 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back(Point(_point.x + 1, _point.y + 1));
 		_get_more_kills(_board, Point(_point.x + 2, _point.y + 2), copy, best_kills);
 	}
-
+	// Вниз влево
 	if (_point.x - 1 >= 0 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x - 1] != nullptr && _board[_point.y - 1][_point.x - 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x - 1, _point.y - 1)) == _kills.end() && _point.x - 2 >= 0 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x - 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
 		copy.push_back(Point(_point.x - 1, _point.y - 1));
 		_get_more_kills(_board, Point(_point.x - 2, _point.y - 2), copy, best_kills);
 	}
-
+	// Вниз вправо
 	if (_point.x + 1 < 8 && _point.y - 1 >= 0 && _board[_point.y - 1][_point.x + 1] != nullptr && _board[_point.y - 1][_point.x + 1]->isWhite() != this->white && find(_kills.begin(), _kills.end(), Point(_point.x + 1, _point.y - 1)) == _kills.end() && _point.x + 2 < 8 && _point.y - 2 >= 0 && _board[_point.y - 2][_point.x + 2] == nullptr)
 	{
 		vector<Point> copy = _kills;
@@ -63,13 +65,14 @@ void Checher::get_possible_moveS(Figure*** _board, const Point& _point, vector<P
 	vector<Point> temp_kills;
 	Point_2D res;
 
+	// Проверяем и получаем ход с убийствами, если есть убийства
 	_get_more_kills(_board, _point, temp_kills, res);
 
 	if (res.kills.size())
 	{
 		res.from = _point;
 		_res.push_back(res);
-	}
+	}	// Иначе стандартные ходы для фигуры соответсвенного цвета
 	else if (this->white)
 	{
 		if (_point.x - 1 >= 0 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x - 1] == nullptr)

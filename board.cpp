@@ -94,12 +94,12 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 	{
 		for (int j = 0; j < 8; ++j)
 		{
-			if (this->board[i][j] == nullptr || this->board[i][j]->isWhite() != _isWhite) continue;
+			if (this->board[i][j] == nullptr || this->board[i][j]->isWhite() != _isWhite) continue;	// Если нет фигуры или цвет не тот, то пропускаем ее
 			temp_moves.clear();
-			this->board[i][j]->get_possible_moveS(this->board, Point(j, i), temp_moves);
+			this->board[i][j]->get_possible_moveS(this->board, Point(j, i), temp_moves);	// Получаем возможные ходы шашки
 			for (int z = 0; z < temp_moves.size(); z++)
 			{
-				if (!fook && temp_moves[z].kills.size())
+				if (!fook && temp_moves[z].kills.size())	// Если она рубит других, то ходы без атаки на врага учитывать нельзя (фук)
 				{
 					fook = true;
 					all_moves.clear();
@@ -109,37 +109,33 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 				{
 					continue;
 				}
-
+				// Обработка ходов
 				temp_moves[z].enemy_kills_after_move = _enemy_kills_after_move(temp_moves[z]);
-				temp_moves[z].ratio = _calc_ratio(temp_moves[z]);
+				temp_moves[z].ratio = _calc_ratio(temp_moves[z]);	// Рассчет коэффицента
 				all_moves.push_back(temp_moves[z]);
 			}
 		}
-	}
-
-	if (fook)
-	{
-
 	}
 
 	Point_2D res;
 	res.ratio = -999;
 	for (int i = 0; i < all_moves.size(); ++i)
 	{
-		if (all_moves[i].ratio > res.ratio)
+		if (all_moves[i].ratio > res.ratio)	// Отбираем ход с наибольшим коэффицентом
 			res = all_moves[i];
 	}
 
-	if (res.ratio > 0 || res.ratio < 0)
+	if (res.ratio > 0 || res.ratio < 0)	// Если К > 0, то убиваем больше чем теряем, поэтому ходим. Если К < 0, то даже при лучшем ходе есть потери,поэтому ходим
 		return res;
 
+	// Иначе смотрим будущие ходы и ищем с наиболльшим коэффицентом
 
-	int max_count(4), max_ratio(-999);
-	vector<pair<Point_2D, Point_2D>> all_future_moves;
+	int max_count(4), max_ratio(-999);	// Переменные для контроля глубины анализа (защита от бесконечного цикла) и нахождения макс. коэффицента соответственно
+	vector<pair<Point_2D, Point_2D>> all_future_moves;	// Рассчеты те же, но вектор сложнее (нужно хранить самый первый ход, чтоб после прогноза знать как ходить + учет исходных координат фигуры
 	vector<pair<Point_2D, Point_2D>> temp_all_future_moves;
 	for (int i = 0; i < all_moves.size(); i++)
 	{
-		all_future_moves.push_back(pair<Point_2D, Point_2D>(all_moves[i], all_moves[i]));		// Самый первый ход, а вторая пара - будущие ходы
+		all_future_moves.push_back(pair<Point_2D, Point_2D>(all_moves[i], all_moves[i]));		// Первая пара - самый первый ход, а вторая пара - будущие ходы
 	}
 
 	while (max_count)
@@ -147,7 +143,7 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 		max_ratio = -999;
 		for (auto it = all_future_moves.begin(); it < all_future_moves.end(); it++)
 		{
-			if (it->second.ratio != 0)
+			if (it->second.ratio != 0)	// Удаляем отрицательные коэффиценты (потому что при них шашка гибнет после первого же хода), положительных коэффицентов здесь нет, потому что они учитываются в условии выхода выше
 				it = all_future_moves.erase(it);
 		}
 		temp_all_future_moves.clear();
@@ -184,10 +180,11 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 
 int Board::_enemy_kills_after_move(const Point_2D& _point) const
 {
-	Board board = *this;
+	Board board = *this;	// копия доски
 
-	bool color = board.board[_point.from.y][_point.from.x]->isWhite();
+	bool color = board.board[_point.from.y][_point.from.x]->isWhite();	// цвет ходящей фигуры
 
+	// делаем ход
 	board.board[_point.from.y][_point.from.x]->~Figure();
 	board.board[_point.from.y][_point.from.x] = nullptr;
 
@@ -210,7 +207,8 @@ int Board::_enemy_kills_after_move(const Point_2D& _point) const
 			}
 		}
 	}
-	
+
+	// Если вражеские фигуры убивают фигуру из-за которой был совершен ход, ворачиваем число гибнущих из-за этого фигур, иначе 0
 	if (find(best_enemy_move.kills.begin(), best_enemy_move.kills.end(), Point(_point.to.x, _point.to.y)) == best_enemy_move.kills.end())
 		return 0;
 	else
@@ -219,11 +217,11 @@ int Board::_enemy_kills_after_move(const Point_2D& _point) const
 
 int Board::_calc_ratio(const Point_2D& _point) const
 {
-	if (_point.enemy_kills_after_move)
+	if (_point.enemy_kills_after_move)	// Если теряем больше, чем уничтожаем, то коэффициент < 0
 	{
 		return _point.kills.size() - _point.enemy_kills_after_move;
 	}
-	else
+	else	// Если смертей в результате хода нет - повышенный коэффициент
 	{
 		return _point.kills.size() * 2;
 	}
@@ -234,10 +232,12 @@ void Board::do_move(const Point_2D& _move_point)
 	if (_move_point.to > Point(7,7) || _move_point.from > Point(7, 7) || _move_point.to < Point(0, 0) || _move_point.from < Point(0, 0))
 		throw "Error points in parameter  (from 'do_move')";
 
+	// Передвигаем ходящую фигуру
 	this->board[_move_point.to.y][_move_point.to.x] = this->board[_move_point.from.y][_move_point.from.x];
 	this->board[_move_point.from.y][_move_point.from.x]->~Figure();
 	this->board[_move_point.from.y][_move_point.from.x] = nullptr;
 
+	// Затираем пострадавших
 	for (int i = 0; i < _move_point.kills.size(); i++)
 	{
 		if (this->board[_move_point.kills[i].y][_move_point.kills[i].x] == nullptr) throw "Error points of kills in parameter  (from 'do_move')";
@@ -245,12 +245,15 @@ void Board::do_move(const Point_2D& _move_point)
 		this->board[_move_point.kills[i].y][_move_point.kills[i].x] = nullptr;
 	}
 
+	// Обновление количества фигур на доске
 	this->count -= _move_point.kills.size();
 	if (!this->board[_move_point.to.y][_move_point.to.x]->isWhite()) this->count_white -= _move_point.kills.size();
 
+	// Условие окончания игры
 	if (this->count_white == 0 || this->count - this->count_white == 0)
 		this->_end_game = true;
 
+	// Условие на то, что шашка стала королевой (дамка)
 	if ((_move_point.to.y == 7 && this->board[_move_point.to.y][_move_point.to.x]->isWhite()) || (_move_point.to.y == 0 && !this->board[_move_point.to.y][_move_point.to.x]->isWhite()))
 	{
 		bool color_figure = this->board[_move_point.to.y][_move_point.to.x]->isWhite();
@@ -371,7 +374,7 @@ ofstream& operator <<(ofstream& out, const Board& board)
 			{
 				if (board.board[i][j]->isKing())
 				{
-					out << 'M';
+					out << 'M';	// Метка на королеву
 				}
 				out << char(j + 65) << i + 1 << endl;
 			}
