@@ -125,7 +125,7 @@ Point_2D Board::get_effective_move(const bool _isWhite)
 			res = all_moves[i];
 	}
 
-	if (res.ratio > 0 || res.ratio < 0)	// Если К > 0, то убиваем больше чем теряем, поэтому ходим. Если К < 0, то даже при лучшем ходе есть потери,поэтому ходим
+	if (res.ratio > 0 || res.ratio < 0)	// Если К > 0, то убиваем больше чем теряем, поэтому ходим. Если К < 0, то даже при лучшем ходе есть потери, поэтому ходим
 		return res;
 
 	// Иначе смотрим будущие ходы и ищем с наиболльшим коэффицентом
@@ -234,7 +234,7 @@ void Board::do_move(const Point_2D& _move_point)
 
 	// Передвигаем ходящую фигуру
 	this->board[_move_point.to.y][_move_point.to.x] = this->board[_move_point.from.y][_move_point.from.x];
-	this->board[_move_point.from.y][_move_point.from.x]->~Figure();
+	//this->board[_move_point.from.y][_move_point.from.x]->~Figure();	// Так как адрес еще действителен, объект не трогаем
 	this->board[_move_point.from.y][_move_point.from.x] = nullptr;
 
 	// Затираем пострадавших

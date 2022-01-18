@@ -72,7 +72,7 @@ void Checher::get_possible_moveS(Figure*** _board, const Point& _point, vector<P
 	{
 		res.from = _point;
 		_res.push_back(res);
-	}	// Иначе стандартные ходы для фигуры соответсвенного цвета
+	}	// Иначе стандартные ходы для фигуры соответственного цвета
 	else if (this->white)
 	{
 		if (_point.x - 1 >= 0 && _point.y + 1 < 8 && _board[_point.y + 1][_point.x - 1] == nullptr)
